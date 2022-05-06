@@ -353,7 +353,7 @@ enum ac_fanmute : uint8_t { AC_FANMUTE_OFF = 0x00, AC_FANMUTE_ON = 0x80, AC_FANM
 
 // включение-выключение дисплея на корпусе внутреннего блока
 #define AC_DISPLAY_MASK    0b00010000
-enum ac_display : uint8_t { AC_DISPLAY_ON = 0x00, AC_DISPLAY_OFF = 0x10, AC_DISPLAY_UNTOUCHED = 0xFF };
+enum ac_display : uint8_t { AC_DISPLAY_ON = 0x10, AC_DISPLAY_OFF = 0x00, AC_DISPLAY_UNTOUCHED = 0xFF }; // Проинвертировал
 
 // включение-выключение функции "Антиплесень". 
 // По факту: после выключения сплита он оставляет минут на 5 открытые жалюзи и глушит вентилятор. Уличный блок при этом гудит и тарахтит.
