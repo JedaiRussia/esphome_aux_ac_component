@@ -347,7 +347,7 @@ enum ac_fanspeed : uint8_t { AC_FANSPEED_HIGH = 0x20, AC_FANSPEED_MEDIUM = 0x40,
 #define AC_FANTURBO_MASK    0b01000000
 enum ac_fanturbo : uint8_t { AC_FANTURBO_OFF = 0x00, AC_FANTURBO_ON = 0x40, AC_FANTURBO_UNTOUCHED = 0xFF };
 
-// MUTE работает только в режиме FAN. В режиме COOL кондей команду принимает, но MUTE не устанавливается
+// MUTE работает только в режиме FAN (внес правки - в режиме FAN и COOL). В режиме COOL кондей команду принимает, но MUTE не устанавливается (
 #define AC_FANMUTE_MASK    0b10000000
 enum ac_fanmute : uint8_t { AC_FANMUTE_OFF = 0x00, AC_FANMUTE_ON = 0x80, AC_FANMUTE_UNTOUCHED = 0xFF };
 
@@ -1710,7 +1710,7 @@ class AirCon : public esphome::Component, public esphome::climate::Climate {
             _debugMsg(F("Climate fan TURBO mode: %i"), ESPHOME_LOG_LEVEL_VERBOSE, __LINE__, _current_ac_state.fanTurbo);
 
             /*************************** MUTE FAN MODE ***************************/
-            // MUTE работает только в режиме FAN. В режиме COOL кондей команду принимает, но MUTE не устанавливается
+            // MUTE работает только в режиме FAN (Для теста пробую и в режиме COOL). В режиме COOL кондей команду принимает, но MUTE не устанавливается
             switch (_current_ac_state.fanMute) {
                 case AC_FANMUTE_ON:
                     if (_current_ac_state.mode == AC_MODE_FAN
@@ -2044,16 +2044,16 @@ class AirCon : public esphome::Component, public esphome::climate::Climate {
                         // MUTE fan mode is suitable in FAN mode only for Rovex air conditioner.
                         // In COOL mode AC receives command without any changes.
                         // May be other AUX-based air conditioners do the same.
-                        if (                     cmd.mode == AC_MODE_FAN
+                        if (    		cmd.mode == AC_MODE_FAN
                                 or _current_ac_state.mode == AC_MODE_FAN
-			    	or cmd.mode == AC_MODE_COOL
+			    		     or cmd.mode == AC_MODE_COOL
                                 or _current_ac_state.mode == AC_MODE_COOL) {
                             
                             hasCommand = true;
                             cmd.fanMute = AC_FANMUTE_ON;
                             this->custom_fan_mode = customfanmode;
                         } else {
-                            _debugMsg(F("MUTE fan mode is suitable in FAN mode only."), ESPHOME_LOG_LEVEL_WARN, __LINE__);
+                            _debugMsg(F("MUTE fan mode is suitable in FAN and COOL (as test) mode only."), ESPHOME_LOG_LEVEL_WARN, __LINE__);
                         }
                 }
             }
