@@ -1713,7 +1713,8 @@ class AirCon : public esphome::Component, public esphome::climate::Climate {
             // MUTE работает только в режиме FAN. В режиме COOL кондей команду принимает, но MUTE не устанавливается
             switch (_current_ac_state.fanMute) {
                 case AC_FANMUTE_ON:
-                    if (_current_ac_state.mode == AC_MODE_FAN) {
+                    if (_current_ac_state.mode == AC_MODE_FAN
+		       or _current_ac_state.mode == AC_MODE_COOL) {
                         this->custom_fan_mode = Constants::MUTE;
                     }
                     break;
@@ -2044,7 +2045,9 @@ class AirCon : public esphome::Component, public esphome::climate::Climate {
                         // In COOL mode AC receives command without any changes.
                         // May be other AUX-based air conditioners do the same.
                         if (                     cmd.mode == AC_MODE_FAN
-                                or _current_ac_state.mode == AC_MODE_FAN) {
+                                or _current_ac_state.mode == AC_MODE_FAN
+			    	or cmd.mode == AC_MODE_COOL
+                                or _current_ac_state.mode == AC_MODE_COOL) {
                             
                             hasCommand = true;
                             cmd.fanMute = AC_FANMUTE_ON;
